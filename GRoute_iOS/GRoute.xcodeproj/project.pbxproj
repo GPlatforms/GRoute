@@ -11,6 +11,7 @@
 		D6AA63201E7A5BE200D00028 /* GRouteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AA631F1E7A5BE200D00028 /* GRouteTests.swift */; };
 		D6AA63221E7A5BE200D00028 /* GRoute.h in Headers */ = {isa = PBXBuildFile; fileRef = D6AA63141E7A5BE200D00028 /* GRoute.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D6AA632C1E7A5D9000D00028 /* GRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AA632B1E7A5D9000D00028 /* GRoute.swift */; };
+		F9E93C685DB3562908F3099C /* Pods_GRoute.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9DA4C11AD4DB46AE1EA1F61 /* Pods_GRoute.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -24,6 +25,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9CAB8DCFE8B3C1A1E04EC497 /* Pods-GRoute.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GRoute.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GRoute/Pods-GRoute.debug.xcconfig"; sourceTree = "<group>"; };
 		D6AA63111E7A5BE200D00028 /* GRoute.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = GRoute.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6AA63141E7A5BE200D00028 /* GRoute.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GRoute.h; sourceTree = "<group>"; };
 		D6AA63151E7A5BE200D00028 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -31,6 +33,8 @@
 		D6AA631F1E7A5BE200D00028 /* GRouteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GRouteTests.swift; sourceTree = "<group>"; };
 		D6AA63211E7A5BE200D00028 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D6AA632B1E7A5D9000D00028 /* GRoute.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GRoute.swift; sourceTree = "<group>"; };
+		D9DA4C11AD4DB46AE1EA1F61 /* Pods_GRoute.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GRoute.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F00A9F7D15DA5EB2CF43CF5F /* Pods-GRoute.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GRoute.release.xcconfig"; path = "Pods/Target Support Files/Pods-GRoute/Pods-GRoute.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -38,6 +42,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F9E93C685DB3562908F3099C /* Pods_GRoute.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -52,12 +57,31 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2C31E5B05AA62E991B8391E8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D9DA4C11AD4DB46AE1EA1F61 /* Pods_GRoute.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		71B484E3400F32088AE8F923 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				9CAB8DCFE8B3C1A1E04EC497 /* Pods-GRoute.debug.xcconfig */,
+				F00A9F7D15DA5EB2CF43CF5F /* Pods-GRoute.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		D6AA63071E7A5BE200D00028 = {
 			isa = PBXGroup;
 			children = (
 				D6AA63131E7A5BE200D00028 /* GRoute */,
 				D6AA631E1E7A5BE200D00028 /* GRouteTests */,
 				D6AA63121E7A5BE200D00028 /* Products */,
+				71B484E3400F32088AE8F923 /* Pods */,
+				2C31E5B05AA62E991B8391E8 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -107,10 +131,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D6AA63251E7A5BE200D00028 /* Build configuration list for PBXNativeTarget "GRoute" */;
 			buildPhases = (
+				69414C5B02BCAA19AA047C1D /* [CP] Check Pods Manifest.lock */,
 				D6AA630C1E7A5BE200D00028 /* Sources */,
 				D6AA630D1E7A5BE200D00028 /* Frameworks */,
 				D6AA630E1E7A5BE200D00028 /* Headers */,
 				D6AA630F1E7A5BE200D00028 /* Resources */,
+				BB0B2DD31DF266646311CA4F /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -194,6 +220,39 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		69414C5B02BCAA19AA047C1D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		BB0B2DD31DF266646311CA4F /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-GRoute/Pods-GRoute-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		D6AA630C1E7A5BE200D00028 /* Sources */ = {
@@ -324,6 +383,7 @@
 		};
 		D6AA63261E7A5BE200D00028 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9CAB8DCFE8B3C1A1E04EC497 /* Pods-GRoute.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
@@ -345,6 +405,7 @@
 		};
 		D6AA63271E7A5BE200D00028 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F00A9F7D15DA5EB2CF43CF5F /* Pods-GRoute.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
