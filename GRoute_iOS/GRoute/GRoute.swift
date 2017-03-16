@@ -10,18 +10,32 @@ import Foundation
 import Alamofire
 
 enum GRouteResult {
-    case Success([String:Any])
+    case Success([Rule])
     case Fail(Error?)
+}
+
+class Rule {
+    var reg = ""
+    var url = ""
+    
+    init() {
+        
+    }
+    
+    init(newReg:String?,newURL:String?) {
+        reg = newReg ?? ""
+        url = newURL ?? ""
+    }
 }
 
 class GRoute {
     static let sharedInstance = GRoute()
     
     init() {
-        print(GRoute.sharedInstance.match(text: "adsfa!", pattern: ".*"))
+        
     }
     
-    private(set) var routeConfig:[String:Any] = [:]
+    public var routeConfig:[Rule] = []
     
     public func getRouteConfigFromServer(_ url: String,
                                          method: HTTPMethod = .get,
@@ -40,7 +54,7 @@ class GRoute {
             }
             switch response.result {
             case .success(_):
-                var res:[String:Any] = [:]
+                var res:[Rule] = []
                 callback(GRouteResult.Success(res))
                 break
             case .failure(_):
@@ -52,18 +66,18 @@ class GRoute {
     
     
     
-    public func match(moduleName:String) -> String {
-        for (key,value) in self.routeConfig {
-            if match(text: moduleName, pattern: key) {
-                return ""
+    public func match(functionName:String) -> String? {
+        for item in self.routeConfig {
+            if textMatch(text: functionName, pattern: item.reg) {
+                return item.url
             }
         }
-        return ""
+        return nil
     }
     
-    public func match(text: String, pattern: String) -> Bool {
+    public func textMatch(text: String, pattern: String) -> Bool {
+        debugPrint("text: \(text)")
+        debugPrint("pattern: \(pattern)")
         return NSPredicate(format: "SELF MATCHES %@", pattern).evaluate(with: text)
     }
 }
-
-let GRouteClient = GRoute.sharedInstance
