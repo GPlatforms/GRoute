@@ -1,0 +1,8 @@
+*~
+.DS_Store
+xcshareddata
+xcuserdata
+*.lock
+/Pods
+._*
+.idea
