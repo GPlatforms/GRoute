@@ -45,8 +45,8 @@ public class GRoute {
      * Groute Error Code
      * ====================================
      */
-    public static final int OK = 200;
-    public static final int ERROR_HTTP = -1;
+    public static final int CODE_OK = 200;
+    public static final int CODE_ERROR_HTTP = -1;
 
     /**
      * ====================================
@@ -66,17 +66,17 @@ public class GRoute {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                gRouteCallBack.onError(ERROR_HTTP, e.getMessage());
+                gRouteCallBack.onError(CODE_ERROR_HTTP, e.getMessage());
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                String gRouteJson = response.body().toString();
+                String gRouteJson = response.body().string();
                 Gson gson = new Gson();
                 GRouteModel gRouteModel = gson.fromJson(gRouteJson, GRouteModel.class);
                 GRouteData gRouteData = gRouteModel.getData();
 
-                if (gRouteModel.getCode() == OK) {
+                if (gRouteModel.getCode() == CODE_OK) {
                     mGRouteJson = gRouteJson;
                     mGRouteModel = gRouteModel;
                     mGRouteData = gRouteData;
@@ -93,7 +93,7 @@ public class GRoute {
         List<BaseUrl> list = mGRouteData.getBase_url();
         for (BaseUrl baseUrl : list) {
             if ("*".equals(baseUrl.getReg())) {
-                return baseUrl.getReg();
+                return baseUrl.getUrl();
             }
         }
         return null;
@@ -103,7 +103,7 @@ public class GRoute {
         List<BaseUrl> list = mGRouteData.getBase_url();
         for (BaseUrl baseUrl : list) {
             if (module.matches(baseUrl.getReg())) {
-                return baseUrl.getReg();
+                return baseUrl.getUrl();
             }
         }
         return null;
