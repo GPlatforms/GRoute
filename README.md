@@ -7,6 +7,8 @@ Server config route platform
 - 服务器能够定时检测服务可用性，做出预警（可选）
 - SDK 可配置常规基本参数：版本，平台...
 - SDK 提供给 APP 方便的查询 JSON 数据的接口
+- SDK 支持缓存设置
+- SDK 支持多源配置，保证配置服务器的高可用性
 
 ## 服务器返回结果
 ```json
