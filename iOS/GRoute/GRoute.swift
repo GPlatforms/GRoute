@@ -9,12 +9,12 @@
 import Foundation
 import Alamofire
 
-enum GRouteResult {
+public enum GRouteResult {
     case Success([Rule])
     case Fail(Error?)
 }
 
-class Rule {
+public class Rule {
     var reg = ""
     var url = ""
     
@@ -28,10 +28,10 @@ class Rule {
     }
 }
 
-class GRouteClient {
+public class GRouteClient {
     static let sharedInstance = GRouteClient()
     
-    init() {
+    private init() {
         
     }
     
