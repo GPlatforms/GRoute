@@ -54,7 +54,7 @@ class GRoute {
             }
             switch response.result {
             case .success(_):
-                var res:[Rule] = []
+                let res:[Rule] = []
                 callback(GRouteResult.Success(res))
                 break
             case .failure(_):
