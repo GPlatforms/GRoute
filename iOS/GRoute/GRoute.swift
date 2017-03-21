@@ -28,8 +28,8 @@ class Rule {
     }
 }
 
-class GRoute {
-    static let sharedInstance = GRoute()
+class GRouteClient {
+    static let sharedInstance = GRouteClient()
     
     init() {
         
