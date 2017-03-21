@@ -1,7 +1,7 @@
 # GRoute
 Server config route platform
 
-## 愿景
+## Feature List
 - 服务端能够灵活的配置各个参数
 - 服务端能根据客户端请求属性返回对应的 JSON、支持条件的配置
 - 服务器能够定时检测服务可用性，做出预警（可选）
@@ -10,31 +10,46 @@ Server config route platform
 - SDK 支持缓存设置
 - SDK 支持多源配置，保证配置服务器的高可用性
 
-## 服务器返回结果
+## Config Json
 ```json
 {
     "code": 200,
-        "msg": "success",
-        "data": {
-            "base_url": [
-            {
-                "reg": "fa",
-                "url": "http://www.baidu.com"
-            },
-            {
-                "reg": "fa",
-                "url": "http://www.baidu.com"
-            },
-            {
-                "reg": "*",
-                "url": "http://www.baidu.com"
-            }
-            ]
-        }
+     "msg": "success",
+     "data": {
+         "app_id": "aaaa",
+         "share": {
+             "title": "分享",
+             "url": "http://www.taobao.com"
+         },
+         "base_url": [
+         {
+             "reg": "fa",
+             "url": "http://www.baidu.com"
+         },
+         {
+             "reg": "fa",
+             "url": "http://www.163.com"
+         },
+         {
+             "reg": "*",
+             "url": "http://www.sina.com"
+         }
+         ],
+         "arr": [
+             "arr1",
+         "arr2"
+         ],
+         "arr2": [
+             1,
+         2
+         ],
+         "is_check": true,
+         "count": 10
+     }
 }
 ```
 
-## SDK 参数配置
+## Usage
 
 Android: [进入详情](Android/README.md)
 

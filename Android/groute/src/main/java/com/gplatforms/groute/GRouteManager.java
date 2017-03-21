@@ -58,8 +58,9 @@ public class GRouteManager {
      */
     private static HashSet<String> mConfigUrls = new HashSet<>();
 
-    public static void addConfigUrl(String url) {
+    public GRouteManager addConfigUrl(String url) {
         mConfigUrls.add(url);
+        return this;
     }
 
     /**

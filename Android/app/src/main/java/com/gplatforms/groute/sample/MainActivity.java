@@ -27,7 +27,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        GRouteManager.addConfigUrl("http://api.dianchibbs.com/config/definition");
+        GRouteManager.getInstance()
+                .addConfigUrl("http://api.dianchibbs.com/config/definition")
+                .addConfigUrl("http://api.dianchibbs.com/config/definition2")
+                .addConfigUrl("http://api.dianchibbs.com/config/definition3");
 
         mRequestButton = (Button) findViewById(R.id.request);
         mResultView = (TextView) findViewById(R.id.result);
