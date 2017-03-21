@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D67271D91E8118C6006F93BA /* GRoute.podspec in Resources */ = {isa = PBXBuildFile; fileRef = D67271D81E8118C6006F93BA /* GRoute.podspec */; };
 		D6AA631B1E7A5BE200D00028 /* GRoute.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6AA63111E7A5BE200D00028 /* GRoute.framework */; };
 		D6AA63201E7A5BE200D00028 /* GRouteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AA631F1E7A5BE200D00028 /* GRouteTests.swift */; };
 		D6AA63221E7A5BE200D00028 /* GRoute.h in Headers */ = {isa = PBXBuildFile; fileRef = D6AA63141E7A5BE200D00028 /* GRoute.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -26,6 +27,7 @@
 
 /* Begin PBXFileReference section */
 		9CAB8DCFE8B3C1A1E04EC497 /* Pods-GRoute.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GRoute.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GRoute/Pods-GRoute.debug.xcconfig"; sourceTree = "<group>"; };
+		D67271D81E8118C6006F93BA /* GRoute.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GRoute.podspec; sourceTree = "<group>"; };
 		D6AA63111E7A5BE200D00028 /* GRoute.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = GRoute.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6AA63141E7A5BE200D00028 /* GRoute.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GRoute.h; sourceTree = "<group>"; };
 		D6AA63151E7A5BE200D00028 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -82,6 +84,7 @@
 				D6AA63121E7A5BE200D00028 /* Products */,
 				71B484E3400F32088AE8F923 /* Pods */,
 				2C31E5B05AA62E991B8391E8 /* Frameworks */,
+				D67271D81E8118C6006F93BA /* GRoute.podspec */,
 			);
 			sourceTree = "<group>";
 		};
@@ -209,6 +212,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D67271D91E8118C6006F93BA /* GRoute.podspec in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
