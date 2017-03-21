@@ -29,7 +29,7 @@ public class Rule {
 }
 
 public class GRouteClient {
-    static let sharedInstance = GRouteClient()
+    public static let sharedInstance = GRouteClient()
     
     private init() {
         
