@@ -7,7 +7,7 @@ GRoute提供以下方法，方便开发者：
 void request(fGRouteCallBack gRouteCallBack) // 请求配置
 String getBaseUrl()                          // 获取可用URL
 String getBaseUrl(String module)             // 获取特定模块可用URL
-String getExtValue(String key)               // 获取Key-Value属性值
+String get(String key)                       // 获取Key-Value属性值
 ```
 
 ## 使用步骤
