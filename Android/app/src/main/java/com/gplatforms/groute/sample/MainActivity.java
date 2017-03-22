@@ -14,10 +14,13 @@ import com.gplatforms.groute.model.GRouteData;
 
 import java.util.List;
 
+import us.feras.mdv.MarkdownView;
+
 public class MainActivity extends AppCompatActivity {
 
     private Button mRequestButton;
     private TextView mResultView;
+    private MarkdownView markdownView;
 
     private StringBuilder mResult = new StringBuilder();
 
@@ -28,18 +31,21 @@ public class MainActivity extends AppCompatActivity {
 
 
         GRouteManager.getInstance()
-                .addConfigUrl("http://api.dianchibbs.com/config/definition")
                 .addConfigUrl("http://api.dianchibbs.com/config/definition2")
+                .addConfigUrl("http://api.dianchibbs.com/config/definition")
                 .addConfigUrl("http://api.dianchibbs.com/config/definition3");
 
         mRequestButton = (Button) findViewById(R.id.request);
         mResultView = (TextView) findViewById(R.id.result);
+        markdownView = (MarkdownView) findViewById(R.id.markdown);
+
         mRequestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 request();
             }
         });
+        setMarkdownText();
     }
 
     public void request() {
@@ -62,6 +68,14 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSuccess() {
+                mResult.append("请求成功：\n\n");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mResultView.setText(mResult.toString());
+                    }
+                });
+
                 GRouteManager routeManager = GRouteManager.getInstance();
 
                 mResult.append("JSON: " + routeManager.getJson() + "\n\n\n");
@@ -92,5 +106,9 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    private void setMarkdownText() {
+        markdownView.loadMarkdownFile("file:///android_asset/README.md");
     }
 }

@@ -121,13 +121,12 @@ public class GRouteManager {
 
                     // json
                     String gRouteJson = response.body().string();
-                    mGRouteJson = gRouteJson;
                     try {
-                        mGRouteJsonObject = new JSONObject(mGRouteJson);
+                        mGRouteJsonObject = new JSONObject(gRouteJson);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    Log.d(TAG, "groute json:" + mGRouteJson);
+                    Log.d(TAG, "groute json: " + gRouteJson);
 
                     // model
                     Gson gson = new Gson();
@@ -141,6 +140,7 @@ public class GRouteManager {
                             if (gRouteModel.getCode() == CODE_OK) {
                                 if (!isSuccessed) {
                                     isSuccessed = true;
+                                    mGRouteJson = gRouteJson;
                                     baseCallBack.onSuccess();
                                 } else {
                                     Log.d(TAG, "discard response after request successed.");
