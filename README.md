@@ -49,7 +49,7 @@ Server config route platform
 }
 ```
 
-#签名
+## Sign
 sign = sha1({app_id}data{secret})
 app_id+数据+密钥
 
