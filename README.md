@@ -49,6 +49,10 @@ Server config route platform
 }
 ```
 
+#签名
+sign = sha1({app_id}data{secret})
+app_id+数据+密钥
+
 ## Usage
 
 Android: [详情](Android/README.md)
