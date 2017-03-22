@@ -51,9 +51,9 @@ Server config route platform
 
 ## Usage
 
-Android: [进入详情](Android/README.md)
+Android: [详情](Android/README.md)
 
-iOS: [进入详情](iOS/README.md)
+iOS: [详情](iOS/README.md)
 
 ## License
 
