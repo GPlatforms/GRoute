@@ -10,7 +10,7 @@ import Foundation
 import Alamofire
 
 public enum GRouteResult {
-    case Success([Rule])
+    case Success()
     case Fail(Error?)
 }
 
@@ -28,14 +28,18 @@ public class Rule {
     }
 }
 
-public class GRouteClient {
-    public static let sharedInstance = GRouteClient()
+
+
+public class GRouteManager {
+    public static let sharedInstance = GRouteManager()
     
     private init() {
         
     }
     
-    public var routeConfig:[Rule] = []
+    public var urlConfig:[Rule] = []
+    
+    public var originDict:[String:Any] = [:]
     
     public func getRouteConfigFromServer(_ url: String,
                                          method: HTTPMethod = .get,
@@ -43,19 +47,25 @@ public class GRouteClient {
                                          encoding: ParameterEncoding = URLEncoding.default,
                                          headers: HTTPHeaders? = nil,
                                          callback:@escaping ((GRouteResult) -> Void))  {
-        Alamofire.request(url).responseJSON { response in
+        Alamofire.request(url).responseJSON { (response:DataResponse<Any>) in
             debugPrint("Request: \(response.request)")
             debugPrint("Response: \(response.response)")
             debugPrint("Error: \(response.error)")
-
             
-            if let json = response.result.value {
-                debugPrint("JSON: \(json)")
-            }
+            
             switch response.result {
-            case .success(_):
-                let res:[Rule] = []
-                callback(GRouteResult.Success(res))
+            case .success(let value):
+                if let data = value as? NSData {
+                    debugPrint("data")
+                }
+                if let str = value as? String {
+                    debugPrint("String")
+                }
+                /*if let jsonObj = (try? JSONSerialization.jsonObject(with: value, options: .allowFragments) ) as? [AnyHashable:Any] {
+                    
+                }*/
+                
+                callback(GRouteResult.Success())
                 break
             case .failure(_):
                 callback(GRouteResult.Fail(response.error))
@@ -66,8 +76,8 @@ public class GRouteClient {
     
     
     
-    public func match(functionName:String) -> String? {
-        for item in self.routeConfig {
+    public func getBaseUrl(functionName : String) -> String? {
+        for item in self.urlConfig {
             if textMatch(text: functionName, pattern: item.reg) {
                 return item.url
             }
@@ -75,9 +85,11 @@ public class GRouteClient {
         return nil
     }
     
-    public func textMatch(text: String, pattern: String) -> Bool {
-        debugPrint("text: \(text)")
-        debugPrint("pattern: \(pattern)")
+    public func get<T>(key : String) -> T? {
+        return originDict[key] as? T
+    }
+    
+    private func textMatch(text: String, pattern: String) -> Bool {
         return NSPredicate(format: "SELF MATCHES %@", pattern).evaluate(with: text)
     }
 }
