@@ -22,10 +22,7 @@ class GRouteTests: XCTestCase {
     }
     
     func testPredicate() {
-        let gRoute = GRoute.sharedInstance
-        XCTAssert(gRoute.textMatch(text: "asdf!", pattern: ".*"))
-        
-        XCTAssertEqual((gRoute.textMatch(text: "asdf", pattern: "x")), false)
+        let gRoute = GRouteManager.sharedInstance
         
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
@@ -36,16 +33,7 @@ class GRouteTests: XCTestCase {
     }
     
     func testMatch() {
-        let gRoute = GRoute.sharedInstance
-        
-        gRoute.routeConfig = [Rule(newReg: "fa", newURL: "http://www.baidu.com"),
-                              Rule(newReg: ".*", newURL: "http://www.taobao.com")]
-        let urlA = gRoute.match(functionName: "fa")
-        let urlB = gRoute.match(functionName: "fb")
-        print(urlA)
-        print(urlB)
-        XCTAssertEqual(urlA, "http://www.baidu.com")
-        XCTAssertEqual(urlB, "http://www.taobao.com")
+        let gRoute = GRouteManager.sharedInstance
     }
     
     func testPerformanceExample() {

@@ -47,7 +47,7 @@ public class GRouteManager {
                                          encoding: ParameterEncoding = URLEncoding.default,
                                          headers: HTTPHeaders? = nil,
                                          callback:@escaping ((GRouteResult) -> Void))  {
-        Alamofire.request(url).responseJSON { (response:DataResponse<Any>) in
+        Alamofire.request(url).responseJSON { [weak self] (response:DataResponse<Any>) in
             debugPrint("Request: \(response.request)")
             debugPrint("Response: \(response.response)")
             debugPrint("Error: \(response.error)")
@@ -55,15 +55,22 @@ public class GRouteManager {
             
             switch response.result {
             case .success(let value):
-                if let data = value as? NSData {
-                    debugPrint("data")
+                if let jsonObj = value as? [AnyHashable:Any] {
+                    if jsonObj["code"] as? Int != 200 {
+                        callback(GRouteResult.Fail(response.error))
+                        break
+                    }
+                    guard let data = jsonObj["data"] as? [String:Any] else {
+                        callback(GRouteResult.Fail(response.error))
+                        break
+                    }
+                    self?.originDict = data
+                    if let urlConfig = self?.originDict["base_url"] as? Array<[String:Any]> {
+                        self?.urlConfig = urlConfig.map({ (obj) -> Rule in
+                            return Rule.init(newReg: obj["reg"] as? String, newURL: obj["url"] as? String)
+                        })
+                    }
                 }
-                if let str = value as? String {
-                    debugPrint("String")
-                }
-                /*if let jsonObj = (try? JSONSerialization.jsonObject(with: value, options: .allowFragments) ) as? [AnyHashable:Any] {
-                    
-                }*/
                 
                 callback(GRouteResult.Success())
                 break
@@ -76,13 +83,17 @@ public class GRouteManager {
     
     
     
-    public func getBaseUrl(functionName : String) -> String? {
+    public func getBaseUrl(functionName : String = "*") -> String? {
         for item in self.urlConfig {
-            if textMatch(text: functionName, pattern: item.reg) {
+            if item.reg == functionName {
                 return item.url
             }
         }
-        return nil
+        //return urlConfig
+        let all = urlConfig.filter({ (rule) -> Bool in
+            return rule.reg == "*"
+        })
+        return all.first?.url
     }
     
     public func get<T>(key : String) -> T? {
