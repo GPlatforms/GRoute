@@ -47,7 +47,7 @@ public class GRouteManager {
                                          encoding: ParameterEncoding = URLEncoding.default,
                                          headers: HTTPHeaders? = nil,
                                          callback:@escaping ((GRouteResult) -> Void))  {
-        Alamofire.request(url).responseJSON { [weak self] (response:DataResponse<Any>) in
+        Alamofire.request(url, method: method, parameters: parameters, encoding: encoding, headers: headers).responseJSON { [weak self] (response:DataResponse<Any>) in
             debugPrint("Request: \(response.request)")
             debugPrint("Response: \(response.response)")
             debugPrint("Error: \(response.error)")
