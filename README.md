@@ -23,7 +23,7 @@ Server config route platform
 ##接口
 ##GET
 url=域名/api/v1/app/config/dns_info?app_id=xx&timestamp=xx&sign=xxx
-## Sign
+## Sign(小写)
 sign = sha1(sercet + app_id + timestamp)
 密钥+app_id+时间戳
 
