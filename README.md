@@ -16,42 +16,20 @@ Server config route platform
     "code": 200,
      "msg": "success",
      "data": {
-         "app_id": "aaaa",
-         "share": {
-             "title": "分享",
-             "url": "http://www.taobao.com"
-         },
-         "base_url": [
-         {
-             "reg": "fa",
-             "url": "http://www.baidu.com"
-         },
-         {
-             "reg": "fa",
-             "url": "http://www.163.com"
-         },
-         {
-             "reg": "*",
-             "url": "http://www.sina.com"
-         }
-         ],
-         "arr": [
-             "arr1",
-         "arr2"
-         ],
-         "arr2": [
-             1,
-         2
-         ],
-         "is_check": true,
-         "count": 10
+         "base_url": ["http://www.baidu.com","http://www.163.com","http://www.sina.com"]
      }
 }
 ```
-
+##接口
+##GET
+url=域名/api/v1/app/config/dns_info?app_id=xx&timestamp=xx&sign=xxx
 ## Sign
-sign = sha1({app_id}data{secret})
-app_id+数据+密钥
+sign = sha1(sercet + app_id + timestamp)
+密钥+app_id+时间戳
+
+##注意事项
+timestamp:时间戳误差在5分钟之内。超出会返回错误
+
 
 ## Usage
 

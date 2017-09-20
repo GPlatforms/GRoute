@@ -1,0 +1,21 @@
+{
+    "port": 8867,
+    "app_secret": "8elSYpCKwN",
+    "mode": "dev",
+    "dev": {
+        "mysql": {
+            "host": "localhost:3306",
+            "user": "root",
+            "password": "123456",
+            "name": "vpngo_dns"
+        }
+    },
+    "prod": {
+        "mysql": {
+            "host": "127.0.0.1:3306",
+            "user": "root",
+            "password": "123456",
+            "name": "lottery"
+        }
+    }
+}
