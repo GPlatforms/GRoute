@@ -1,10 +1,9 @@
 package models
 
 type DNSInfo struct {
-	Id      int64
-	AppId   int64
-	DnsUrl  string
-	Updated int64
+	Id     int64
+	AppId  int64
+	DnsUrl string
 }
 
 func (d *DNSInfo) TableName() string {
