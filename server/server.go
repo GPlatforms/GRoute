@@ -14,8 +14,10 @@ func main() {
 
 	gin.SetMode(gin.ReleaseMode)
 	router := gin.New()
-	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
+	if models.Config.Mode != "prod" {
+		router.Use(gin.Logger())
+	}
 
 	router.GET("/api/v1/app/config/dns_info", dnsInfoController.GetDNSInfo)
 

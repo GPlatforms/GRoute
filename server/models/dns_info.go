@@ -13,5 +13,8 @@ func (d *DNSInfo) TableName() string {
 
 func (d *DNSInfo) GetDNSInfo(appId int64) error {
 	err := GORM.Table(`dns_info`).Where("app_id=?", appId).First(d).Error
-	return err
+	if err != nil && err.Error() != RecordNotFound {
+		return err
+	}
+	return nil
 }

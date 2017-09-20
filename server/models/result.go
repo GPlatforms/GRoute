@@ -12,7 +12,10 @@ type ResultData struct {
 	Data interface{} `json:"data"`
 }
 
-var nullData = struct{}{}
+var (
+	RecordNotFound = "record not found"
+	nullData       = struct{}{}
+)
 
 var (
 	SignErr = &ResultData{1102, "sign error", nullData}
