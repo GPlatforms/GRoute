@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"log"
 	"math"
 	"strconv"
 	"time"
@@ -37,11 +36,18 @@ func (d *DNSInfoController) GetDNSInfo(cxt *gin.Context) {
 	appId, _ := strconv.ParseInt(appIdStr, 10, 64)
 
 	dnsInfo := new(models.DNSInfo)
-	dnsInfo.GetDNSInfo(appId)
+	err := dnsInfo.GetDNSInfo(appId)
+	if err != nil {
+		models.ErrLogger.Error("get dns_info error:", appId, err)
+	}
 
 	value := make([]string, 0, 10)
-	err := json.Unmarshal([]byte(dnsInfo.DnsUrl), &value)
-	log.Println(err)
+	if dnsInfo.DnsUrl != "" {
+		err := json.Unmarshal([]byte(dnsInfo.DnsUrl), &value)
+		if err != nil {
+			models.ErrLogger.Error("json unmarshal error:", appId, err)
+		}
+	}
 	data := map[string]interface{}{"base_url": value}
 
 	result := new(models.ResultData)
