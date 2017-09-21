@@ -62,9 +62,9 @@ open class GRouteManager {
                                          headers: HTTPHeaders? = nil,
                                          callback:@escaping ((GRouteResult) -> Void))  {
         Alamofire.request(url, method: method, parameters: parameters, encoding: encoding, headers: headers).responseJSON { [weak self] (response:DataResponse<Any>) in
-            debugPrint("Request: \(response.request)")
-            debugPrint("Response: \(response.response)")
-            debugPrint("Error: \(response.error)")
+            debugPrint("Request: \(String(describing: response.request))")
+            debugPrint("Response: \(String(describing: response.response))")
+            debugPrint("Error: \(String(describing: response.error))")
             
             
             switch response.result {

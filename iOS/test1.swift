@@ -30,7 +30,7 @@ class test1: XCTestCase {
         gRoute.getConfig(app_id: "11235", time: time, sign: "3f9a612fac3014f80794b74392917e8113b7a052", urls: ["http://wenzb.com/groute/v1/config","http://121.40.106.138/groute/v1/config"]) {
             print("baseURL:",gRoute.getBaseUrl())
             print(gRoute.originDict)
-            //ex.fulfill()
+            ex.fulfill()
         }
         //
         waitForExpectations(timeout: 100) { (err) in
