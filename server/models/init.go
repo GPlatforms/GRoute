@@ -3,7 +3,6 @@ package models
 import (
 	"fmt"
 	"log"
-	"net/url"
 
 	"company/vpngo/server/common"
 	"company/vpngo/server/logger"
@@ -23,13 +22,14 @@ func InitConfig() {
 	Config = common.InitConfig("./conf.json")
 
 	dbInit()
+	log.Println("init finish")
 	ErrLogger = logger.ErrorDiary()
 }
 
 func dbInit() {
 	var err error
-	value := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=true&loc=%s",
-		Config.Base.Mysql.User, Config.Base.Mysql.Password, Config.Base.Mysql.Host, Config.Base.Mysql.Name, url.QueryEscape("Asia/Shanghai"))
+	value := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=true&loc=Local",
+		Config.Base.Mysql.User, Config.Base.Mysql.Password, Config.Base.Mysql.Host, Config.Base.Mysql.Name)
 
 	GORM, err = gorm.Open("mysql", value)
 	if err != nil {

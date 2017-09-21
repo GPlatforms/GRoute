@@ -19,7 +19,7 @@ func main() {
 		router.Use(gin.Logger())
 	}
 
-	router.GET("/api/v1/app/config/dns_info", dnsInfoController.GetDNSInfo)
+	router.GET("/groute/v1/config", dnsInfoController.GetDNSInfo)
 
 	err := router.Run(":" + models.Config.Port)
 	if err != nil {

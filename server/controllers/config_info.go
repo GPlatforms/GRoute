@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"math"
+	"net/http"
 	"strconv"
 	"time"
 
@@ -34,7 +35,6 @@ func (d *DNSInfoController) GetDNSInfo(cxt *gin.Context) {
 	}
 
 	appId, _ := strconv.ParseInt(appIdStr, 10, 64)
-
 	dnsInfo := new(models.DNSInfo)
 	err := dnsInfo.GetDNSInfo(appId)
 	if err != nil {
@@ -48,12 +48,18 @@ func (d *DNSInfoController) GetDNSInfo(cxt *gin.Context) {
 			models.ErrLogger.Error("json unmarshal error:", appId, err)
 		}
 	}
-	data := map[string]interface{}{"base_url": value}
 
-	result := new(models.ResultData)
-	result.Code = 200
-	result.Msg = "success"
-	result.Data = data
+	params := make(map[string]interface{})
+	if dnsInfo.Params != "" {
+		err := json.Unmarshal([]byte(dnsInfo.Params), &params)
+		if err != nil {
+			models.ErrLogger.Error("json unmarshal error:", appId, dnsInfo.Params, err)
+		}
+	}
 
-	models.CommonResult(cxt, result)
+	params["code"] = 200
+	params["msg"] = "success"
+	params["base_url"] = value
+
+	cxt.JSON(http.StatusOK, params)
 }
