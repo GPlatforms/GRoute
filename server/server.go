@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var dnsInfoController = &controllers.DNSInfoController{}
+var configInfoController = &controllers.ConfigInfoController{}
 
 func main() {
 	models.InitConfig()
@@ -19,7 +19,7 @@ func main() {
 		router.Use(gin.Logger())
 	}
 
-	router.GET("/groute/v1/config", dnsInfoController.GetDNSInfo)
+	router.GET("/groute/v1/config", configInfoController.GetConfigInfo)
 
 	err := router.Run(":" + models.Config.Port)
 	if err != nil {
