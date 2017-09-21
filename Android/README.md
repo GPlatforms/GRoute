@@ -1,7 +1,7 @@
 配置分发SDK - Android
 =====
 
-下载：[groute-0.2.jar](release/groute-0.2.jar)
+下载：[groute-0.3.jar](release/groute-0.3.jar)
 
 ## 接口
 GRoute提供以下方法请求配置并获取KV配置：
