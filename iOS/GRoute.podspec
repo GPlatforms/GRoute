@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name         = 'GRoute'
-    s.version      = '1.0.5'
+    s.version      = '1.0.6'
     s.summary      = 'Router config'
     s.homepage     = 'https://github.com/GPlatforms/GRoute'
     s.license      = 'MIT'

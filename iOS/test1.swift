@@ -27,8 +27,12 @@ class test1: XCTestCase {
         let gRoute = GRouteManager.sharedInstance
         print("\(Int(NSDate().timeIntervalSince1970))")
         let time = "1505977676"//"\(Int(NSDate().timeIntervalSince1970))"
-        gRoute.getConfig(app_id: "11235", time: time, sign: "3f9a612fac3014f80794b74392917e8113b7a052", urls: ["http://wenzb.com/groute/v1/config","http://121.40.106.138/groute/v1/config"]) {
-            print("baseURL:",gRoute.getBaseUrl())
+        gRoute.app_id = "11235"
+        gRoute.time = time
+        gRoute.urls = ["http://wenzb.com/groute/v1/config","http://121.40.106.138/groute/v1/config"]
+        gRoute.sign = "3f9a612fac3014f80794b74392917e8113b7a052"
+        gRoute.update() {
+            print("baseURL:",gRoute.get())
             print(gRoute.originDict)
             ex.fulfill()
         }
