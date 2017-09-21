@@ -14,7 +14,7 @@ public enum GRouteResult {
     case Fail(Error?)
 }
 
-public class Rule {
+open class Rule {
     var reg = ""
     var url = ""
     
@@ -30,16 +30,30 @@ public class Rule {
 
 
 
-public class GRouteManager {
+open class GRouteManager {
     public static let sharedInstance = GRouteManager()
     
     private init() {
         
     }
     
-    public var urlConfig:[Rule] = []
+    public var urlConfig:[String] = []
     
     public var originDict:[String:Any] = [:]
+    
+    public func getConfig(app_id:String, time:String, sign:String, urls:[String],sucessCallback:@escaping () -> Void) {
+        for item in urls {
+            getRouteConfigFromServer(item, parameters: ["app_id":app_id,"timestamp":"\(time)","sign":sign], callback: { (res) in
+                switch res {
+                case .Success() :
+                    sucessCallback()
+                    return
+                case .Fail(_):
+                    break
+                }
+            })
+        }
+    }
     
     public func getRouteConfigFromServer(_ url: String,
                                          method: HTTPMethod = .get,
@@ -48,27 +62,22 @@ public class GRouteManager {
                                          headers: HTTPHeaders? = nil,
                                          callback:@escaping ((GRouteResult) -> Void))  {
         Alamofire.request(url, method: method, parameters: parameters, encoding: encoding, headers: headers).responseJSON { [weak self] (response:DataResponse<Any>) in
-            debugPrint("Request: \(response.request)")
-            debugPrint("Response: \(response.response)")
-            debugPrint("Error: \(response.error)")
+            debugPrint("Request: \(String(describing: response.request))")
+            debugPrint("Response: \(String(describing: response.response))")
+            debugPrint("Error: \(String(describing: response.error))")
             
             
             switch response.result {
             case .success(let value):
-                if let jsonObj = value as? [AnyHashable:Any] {
+                if let jsonObj = value as? [String:Any] {
+                    print("jsonObj:\(jsonObj)")
                     if jsonObj["code"] as? Int != 200 {
                         callback(GRouteResult.Fail(response.error))
                         break
                     }
-                    guard let data = jsonObj["data"] as? [String:Any] else {
-                        callback(GRouteResult.Fail(response.error))
-                        break
-                    }
-                    self?.originDict = data
-                    if let urlConfig = self?.originDict["base_url"] as? Array<[String:Any]> {
-                        self?.urlConfig = urlConfig.map({ (obj) -> Rule in
-                            return Rule.init(newReg: obj["reg"] as? String, newURL: obj["url"] as? String)
-                        })
+                    self?.originDict = jsonObj
+                    if let newurls = self?.originDict["base_url"] as? Array<String> {
+                        self?.urlConfig = newurls
                     }
                 }
                 
@@ -84,16 +93,7 @@ public class GRouteManager {
     
     
     public func getBaseUrl(functionName : String = "*") -> String? {
-        for item in self.urlConfig {
-            if item.reg == functionName {
-                return item.url
-            }
-        }
-        //return urlConfig
-        let all = urlConfig.filter({ (rule) -> Bool in
-            return rule.reg == "*"
-        })
-        return all.first?.url
+        return urlConfig.first
     }
     
     public func get<T>(key : String) -> T? {

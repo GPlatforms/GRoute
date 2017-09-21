@@ -23,7 +23,12 @@ class GRouteTests: XCTestCase {
     
     func testPredicate() {
         let gRoute = GRouteManager.sharedInstance
-        
+        let time = NSDate().timeIntervalSince1970
+        print(time)
+        gRoute.getConfig(app_id: "11235", time: time, sign: "", urls: ["http://wenzb.com/api/v1/app/config/dns_info"]) { 
+            print(gRoute.getBaseUrl())
+            print(gRoute.originDict)
+        }
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }

@@ -3,18 +3,8 @@ package com.gplatforms.groute;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.gplatforms.groute.callback.BaseCallBack;
-import com.gplatforms.groute.model.BaseUrl;
-import com.gplatforms.groute.model.GRouteData;
-import com.gplatforms.groute.model.GRouteModel;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -58,8 +48,15 @@ public class GRouteManager {
      */
     private static HashSet<String> mConfigUrls = new HashSet<>();
 
-    public GRouteManager addConfigUrl(String url) {
-        mConfigUrls.add(url);
+    public GRouteManager addConfigUrl(String url, String appId, String secret) {
+
+        long currentTime = System.currentTimeMillis() / 1000;
+        String sign = GRouteUtil.sha1(secret + appId + currentTime);
+        String result = url + "?app_id=" + appId + "&timestamp=" + currentTime + "&sign=" + sign;
+
+        Log.d(TAG, "-------------------result: " + result);
+
+        mConfigUrls.add(result);
         return this;
     }
 
@@ -78,14 +75,12 @@ public class GRouteManager {
      * Groute Support
      * ====================================
      */
-    private String mGRouteJson;
-    private JSONObject mGRouteJsonObject;
     private GRouteData mGRouteData;
     private OkHttpClient mHttpClient = new OkHttpClient();
     private boolean isSuccessed = false;
     private int mCallCount = 0;
 
-    public void request(final BaseCallBack baseCallBack) {
+    public void request(final GRouteCallBack callBack) {
         if (mHttpClient.dispatcher().runningCallsCount() > 0) {
             Log.d(TAG, "request is running, please wait it finished...");
             return;
@@ -107,7 +102,7 @@ public class GRouteManager {
                 public void onFailure(Call call, IOException e) {
                     mCallCount--;
                     if (!isSuccessed && mCallCount == 0) {
-                        baseCallBack.onError(CODE_ERROR_HTTP, e.getMessage());
+                        callBack.onError(CODE_ERROR_HTTP, e.getMessage());
                     }
                 }
 
@@ -121,43 +116,28 @@ public class GRouteManager {
 
                     // json
                     String gRouteJson = response.body().string();
-                    try {
-                        mGRouteJsonObject = new JSONObject(gRouteJson);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
                     Log.d(TAG, "groute json: " + gRouteJson);
 
                     // model
                     Gson gson = new Gson();
                     try {
-                        GRouteModel gRouteModel = gson.fromJson(gRouteJson, GRouteModel.class);
-                        if (gRouteModel != null) {
-                            // data
-                            GRouteData gRouteData = gRouteModel.getData();
+                        GRouteData gRouteData = gson.fromJson(gRouteJson, GRouteData.class);
+                        if (gRouteData != null && gRouteData.getCode() == CODE_OK) {
                             mGRouteData = gRouteData;
-
-                            if (gRouteModel.getCode() == CODE_OK) {
-                                if (!isSuccessed) {
-                                    isSuccessed = true;
-                                    mGRouteJson = gRouteJson;
-                                    baseCallBack.onSuccess();
-                                } else {
-                                    Log.d(TAG, "discard response after request successed.");
-                                }
+                            if (!isSuccessed) {
+                                isSuccessed = true;
+                                callBack.onSuccess();
                             } else {
-                                if (!isSuccessed && mCallCount == 0) {
-                                    baseCallBack.onError(gRouteModel.getCode(), gRouteModel.getMsg());
-                                }
+                                Log.d(TAG, "discard response after request successed.");
                             }
                         } else {
                             if (!isSuccessed && mCallCount == 0) {
-                                baseCallBack.onError(CODE_ERROR_PARSE, "model为空");
+                                callBack.onError(CODE_ERROR_PARSE, "model为空");
                             }
                         }
                     } catch (Exception e) {
                         if (!isSuccessed && mCallCount == 0) {
-                            baseCallBack.onError(CODE_ERROR_PARSE, e.getMessage());
+                            callBack.onError(CODE_ERROR_PARSE, e.getMessage());
                         }
                     }
                 }
@@ -166,33 +146,26 @@ public class GRouteManager {
     }
 
     /**
-     * 内置默认的BaseUrl
+     * 内置默认的code, msg, base_url
      *
      * @return
      */
+    public int getCode() {
+        return mGRouteData.getCode();
+    }
+
+    public String getMsg() {
+        return mGRouteData.getMsg();
+    }
+
     public String getBaseUrl() {
-        List<BaseUrl> baseUrls = getList("base_url", new TypeToken<List<BaseUrl>>(){}.getType());
-        for (BaseUrl baseUrl : baseUrls) {
-            if ("*".equals(baseUrl.getReg())) {
-                return baseUrl.getUrl();
-            }
+        List<String> baseUrls = mGRouteData.getBase_url();
+        if (baseUrls != null && baseUrls.size() > 0) {
+            return baseUrls.get(0);
         }
         return null;
     }
 
-    /**特定模块的BaseUrl
-     *
-     * @return
-     */
-    public String getBaseUrl(String module) {
-        List<BaseUrl> baseUrls = getList("base_url", new TypeToken<List<BaseUrl>>(){}.getType());
-        for (BaseUrl baseUrl : baseUrls) {
-            if (module.matches(baseUrl.getReg())) {
-                return baseUrl.getUrl();
-            }
-        }
-        return null;
-    }
 
     /**
      * 获取基本类型： Number, Boolean, String
@@ -204,69 +177,6 @@ public class GRouteManager {
     public <T> T get(String key) {
         T result = (T) mGRouteData.get(key);
         return result;
-    }
-
-    /**
-     * 获取自定义类型： Clazz
-     *
-     * @param key
-     * @param clazz
-     * @param <T>
-     * @return
-     */
-    public <T> T get(String key, Class clazz) {
-        try {
-            JSONObject jsonObject = mGRouteJsonObject.getJSONObject("data").getJSONObject(key);
-            T result = (T) new Gson().fromJson(jsonObject.toString(), clazz);
-
-            return result;
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
-     * 获取基本类型列表： List<Number, Boolean, String>
-     *
-     * @param key
-     * @param <T>
-     * @return
-     */
-    public <T> List<T> getList(String key) {
-        try {
-            JSONArray jsonArray = mGRouteJsonObject.getJSONObject("data").getJSONArray(key);
-            List<T> list = new Gson().fromJson(jsonArray.toString(), new TypeToken<List<T>>(){}.getType());
-
-            return list;
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
-     * 获取自定义类型列表： List<Type>
-     *
-     * @param key
-     * @param type
-     * @param <T>
-     * @return
-     */
-    public <T> List<T> getList(String key, Type type) {
-        try {
-            JSONArray jsonArray = mGRouteJsonObject.getJSONObject("data").getJSONArray(key);
-            List<T> list = new Gson().fromJson(jsonArray.toString(), type);
-
-            return list;
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public String getJson() {
-        return mGRouteJson;
     }
 
 }
