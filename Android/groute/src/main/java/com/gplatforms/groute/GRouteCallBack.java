@@ -1,9 +1,9 @@
-package com.gplatforms.groute.callback;
+package com.gplatforms.groute;
 
 import android.support.annotation.Keep;
 
 @Keep
-public interface BaseCallBack {
+public interface GRouteCallBack {
     void onError(int code, String message);
     void onSuccess();
 }
