@@ -13,9 +13,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type DNSInfoController struct{}
+type ConfigInfoController struct{}
 
-func (d *DNSInfoController) GetDNSInfo(cxt *gin.Context) {
+func (c *ConfigInfoController) GetConfigInfo(cxt *gin.Context) {
 	timestamp := cxt.Query("timestamp")
 	appIdStr := cxt.Query("app_id")
 	sign := cxt.Query("sign")
@@ -35,25 +35,25 @@ func (d *DNSInfoController) GetDNSInfo(cxt *gin.Context) {
 	}
 
 	appId, _ := strconv.ParseInt(appIdStr, 10, 64)
-	dnsInfo := new(models.DNSInfo)
-	err := dnsInfo.GetDNSInfo(appId)
+	configInfo := new(models.ConfigInfo)
+	err := configInfo.GetConfigInfo(appId)
 	if err != nil {
-		models.ErrLogger.Error("get dns_info error:", appId, err)
+		models.ErrLogger.Error("get config_info error:", appId, err)
 	}
 
 	value := make([]string, 0, 10)
-	if dnsInfo.DnsUrl != "" {
-		err := json.Unmarshal([]byte(dnsInfo.DnsUrl), &value)
+	if configInfo.DnsUrl != "" {
+		err := json.Unmarshal([]byte(configInfo.DnsUrl), &value)
 		if err != nil {
 			models.ErrLogger.Error("json unmarshal error:", appId, err)
 		}
 	}
 
 	params := make(map[string]interface{})
-	if dnsInfo.Params != "" {
-		err := json.Unmarshal([]byte(dnsInfo.Params), &params)
+	if configInfo.Params != "" {
+		err := json.Unmarshal([]byte(configInfo.Params), &params)
 		if err != nil {
-			models.ErrLogger.Error("json unmarshal error:", appId, dnsInfo.Params, err)
+			models.ErrLogger.Error("json unmarshal error:", appId, configInfo.Params, err)
 		}
 	}
 
