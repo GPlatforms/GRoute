@@ -15,7 +15,7 @@ func main() {
 	t := time.Now().Unix()
 	str := fmt.Sprintf("%s%s%d", appSercet, appId, t)
 	sig := common.SHA1Sign(str)
-	getUrl := fmt.Sprintf("http://wenzb.com/api/v1/app/config/dns_info?app_id=%s&timestamp=%d&sign=%s", appId, t, sig)
+	getUrl := fmt.Sprintf("http://wenzb.com/groute/v1/config?app_id=%s&timestamp=%d&sign=%s", appId, t, sig)
 	resp, err := http.Get(getUrl)
 	if err != nil {
 		fmt.Println("err:", err)

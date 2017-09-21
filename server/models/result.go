@@ -7,25 +7,20 @@ import (
 )
 
 type ResultData struct {
-	Code int32       `json:"code"`
-	Msg  string      `json:"msg"`
-	Data interface{} `json:"data"`
+	Code    int32       `json:"code"`
+	Msg     string      `json:"msg"`
+	BaseUrl interface{} `json:"base_url"`
 }
 
 var (
 	RecordNotFound = "record not found"
-	nullData       = struct{}{}
 )
 
 var (
-	SignErr = &ResultData{1102, "sign error", nullData}
-	TimeErr = &ResultData{1103, "time error", nullData}
+	SignErr = &ResultData{1102, "sign error", ""}
+	TimeErr = &ResultData{1103, "time error", ""}
 )
 
 func CommonResult(c *gin.Context, result *ResultData) {
-	if result.Data == nil {
-		result.Data = nullData
-	}
-
 	c.JSON(http.StatusOK, result)
 }

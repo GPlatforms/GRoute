@@ -14,17 +14,15 @@ Server config route platform
 ```json
 {
     "code": 200,
-     "msg": "success",
-     "data": {
-         "base_url": ["http://www.baidu.com","http://www.163.com","http://www.sina.com"]
-     }
+    "msg": "success",
+    "base_url": ["http://www.baidu.com","http://www.163.com","http://www.sina.com"]
 }
 ```
 ##接口
 
 ##GET
 
-url=域名/api/v1/app/config/dns_info?app_id=xx&timestamp=xx&sign=xxx
+url=域名/groute/v1/config?app_id=xx&timestamp=xx&sign=xxx
 
 ## Sign(小写)
 sign = sha1(sercet + app_id + timestamp)

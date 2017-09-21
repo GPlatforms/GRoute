@@ -4,6 +4,7 @@ type DNSInfo struct {
 	Id     int64
 	AppId  int64
 	DnsUrl string
+	Params string
 }
 
 func (d *DNSInfo) TableName() string {

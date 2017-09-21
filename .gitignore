@@ -6,3 +6,6 @@ xcuserdata
 /Pods
 ._*
 .idea
+server/server
+server/diary
+
