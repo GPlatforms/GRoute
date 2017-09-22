@@ -1,14 +1,16 @@
 配置分发SDK - Android
 =====
 
-下载：[groute-0.2.jar](release/groute-0.2.jar)
+下载：[groute-0.3.jar](release/groute-0.3.jar)
 
 ## 接口
 GRoute提供以下方法请求配置并获取KV配置：
 
 ```
 
-    void request(GRouteCallBack callback)  // 请求配置
+    boolean isAvaliable()                        // 本地是否有配置数据
+    void update()                                // 请求配置
+    void update(GRouteCallBack callback)         // 请求配置
     T get(String key)                            // 获取基本类型： Number, Boolean, String, List<String>等
 
 ```
@@ -26,10 +28,17 @@ GRoute提供以下方法请求配置并获取KV配置：
 
 ```
 
+    String appId = "11";
+    String secretKey = "8e";
+    List<String> configUrls = new ArrayList<>();
+    configUrls.add("http://111.111.111.111/groute/v1/config");
+    configUrls.add("http://222.222.222.2222/groute/v1/config");
     GRouteManager.getInstance()
-        .addConfigUrl("http://api.dianchibbs.com/config/definition")
-        .addConfigUrl("http://api.dianchibbs.com/config/definition2")
-        .addConfigUrl("http://api.dianchibbs.com/config/definition3");
+            .setContext(context)
+            .setAppId(appId)
+            .setSecret(secretKey)
+            .setConfigUrl(configUrls)
+            .build();
 
 ```
 
@@ -37,7 +46,16 @@ GRoute提供以下方法请求配置并获取KV配置：
 
 ```
 
-    GRouteManager.getInstance().request(new GRouteCallBack() {
+    GRouteManager.getInstance().update();
+
+```
+
+也可以设置回调：
+
+
+```
+
+    GRouteManager.getInstance().update(new GRouteCallBack() {
         @Override
         public void onError(int code, String message) {
             mResult.append("发生错误：\n\n");
@@ -49,10 +67,10 @@ GRoute提供以下方法请求配置并获取KV配置：
         public void onSuccess() {
             GRouteManager routeManager = GRouteManager.getInstance();
 
-            Number count = routeManager.get("count");
-            String app_id = routeManager.get("app_id");
-            boolean is_check = routeManager.get("is_check");
-            List<String> arr = routeManager.getList("arr");
+            int code = routeManager.getCode();
+            String msg = routeManager.getMsg();
+            String baseUrl = routeManager.getBaseUrl();
+            boolean is_vip = routeManager.get("is_vip");
         }
     });
 
