@@ -1,5 +1,7 @@
 package com.gplatforms.groute;
 
+import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -27,38 +29,10 @@ public class GRouteManager {
      */
     private volatile static GRouteManager instance;
 
-    private GRouteManager() {
-    }
-
-    public static GRouteManager getInstance() {
-        if (instance == null) {
-            synchronized (GRouteManager.class) {
-                if (instance == null) {
-                    instance = new GRouteManager();
-                }
-            }
-        }
-        return instance;
-    }
-
-    /**
-     * ====================================
-     * Config Url
-     * ====================================
-     */
+    private Context mContext;
+    private String mAppId;
+    private String mSecret;
     private static HashSet<String> mConfigUrls = new HashSet<>();
-
-    public GRouteManager addConfigUrl(String url, String appId, String secret) {
-
-        long currentTime = System.currentTimeMillis() / 1000;
-        String sign = GRouteUtil.sha1(secret + appId + currentTime);
-        String result = url + "?app_id=" + appId + "&timestamp=" + currentTime + "&sign=" + sign;
-
-        Log.d(TAG, "-------------------result: " + result);
-
-        mConfigUrls.add(result);
-        return this;
-    }
 
     /**
      * ====================================
@@ -80,7 +54,74 @@ public class GRouteManager {
     private boolean isSuccessed = false;
     private int mCallCount = 0;
 
-    public void request(final GRouteCallBack callBack) {
+    private GRouteManager() {
+    }
+
+    public static GRouteManager getInstance() {
+        if (instance == null) {
+            synchronized (GRouteManager.class) {
+                if (instance == null) {
+                    instance = new GRouteManager();
+                }
+            }
+        }
+        return instance;
+    }
+
+    public GRouteManager setContext(Context context) {
+        this.mContext = context;
+        return this;
+    }
+
+    public GRouteManager setAppId(String appId) {
+        this.mAppId = appId;
+        return this;
+    }
+
+    public GRouteManager setSecret(String secret) {
+        this.mSecret = secret;
+        return this;
+    }
+
+    public GRouteManager setConfigUrl(List<String> configUrls) {
+        if (configUrls != null) {
+            for (String configUrl : configUrls) {
+                long currentTime = System.currentTimeMillis() / 1000;
+                String sign = GRouteUtil.sha1(mSecret + mAppId + currentTime);
+                String result = configUrl + "?app_id=" + mAppId + "&timestamp=" + currentTime + "&sign=" + sign;
+
+                mConfigUrls.add(result);
+            }
+        }
+
+        return this;
+    }
+
+    public void build() {
+
+        if (mContext == null) {
+            throw new RuntimeException("please init groute context first.");
+        }
+
+        if (TextUtils.isEmpty(mAppId)) {
+            throw new RuntimeException("please init groute appid first.");
+        }
+
+        if (TextUtils.isEmpty(mSecret)) {
+            throw new RuntimeException("please init groute secret first.");
+        }
+
+        if (mConfigUrls.size() == 0) {
+            throw new RuntimeException("please init groute config url first.");
+        }
+
+    }
+
+    public void update() {
+        update(null);
+    }
+
+    public void update(final GRouteCallBack callback) {
         if (mHttpClient.dispatcher().runningCallsCount() > 0) {
             Log.d(TAG, "request is running, please wait it finished...");
             return;
@@ -102,7 +143,9 @@ public class GRouteManager {
                 public void onFailure(Call call, IOException e) {
                     mCallCount--;
                     if (!isSuccessed && mCallCount == 0) {
-                        callBack.onError(CODE_ERROR_HTTP, e.getMessage());
+                        if (callback != null) {
+                            callback.onError(CODE_ERROR_HTTP, e.getMessage());
+                        }
                     }
                 }
 
@@ -126,18 +169,25 @@ public class GRouteManager {
                             mGRouteData = gRouteData;
                             if (!isSuccessed) {
                                 isSuccessed = true;
-                                callBack.onSuccess();
+                                GRouteUtil.writeCache(mContext, gRouteJson);
+                                if (callback != null) {
+                                    callback.onSuccess();
+                                }
                             } else {
                                 Log.d(TAG, "discard response after request successed.");
                             }
                         } else {
                             if (!isSuccessed && mCallCount == 0) {
-                                callBack.onError(CODE_ERROR_PARSE, "model为空");
+                                if (callback != null) {
+                                    callback.onError(CODE_ERROR_PARSE, "model为空");
+                                }
                             }
                         }
                     } catch (Exception e) {
                         if (!isSuccessed && mCallCount == 0) {
-                            callBack.onError(CODE_ERROR_PARSE, e.getMessage());
+                            if (callback != null) {
+                                callback.onError(CODE_ERROR_PARSE, e.getMessage());
+                            }
                         }
                     }
                 }
@@ -151,14 +201,17 @@ public class GRouteManager {
      * @return
      */
     public int getCode() {
+        ensureGrouteData();
         return mGRouteData.getCode();
     }
 
     public String getMsg() {
+        ensureGrouteData();
         return mGRouteData.getMsg();
     }
 
     public String getBaseUrl() {
+        ensureGrouteData();
         List<String> baseUrls = mGRouteData.getBase_url();
         if (baseUrls != null && baseUrls.size() > 0) {
             return baseUrls.get(0);
@@ -175,8 +228,23 @@ public class GRouteManager {
      * @return
      */
     public <T> T get(String key) {
+        ensureGrouteData();
         T result = (T) mGRouteData.get(key);
         return result;
+    }
+
+    public boolean isAvaliable() {
+        ensureGrouteData();
+        return mGRouteData != null;
+    }
+
+    private void ensureGrouteData() {
+        if (mGRouteData == null) {
+            String cache = GRouteUtil.readCache(mContext);
+            if (!TextUtils.isEmpty(cache)) {
+                mGRouteData = new Gson().fromJson(cache, GRouteData.class);
+            }
+        }
     }
 
 }
