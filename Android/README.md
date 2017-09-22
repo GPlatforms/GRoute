@@ -27,7 +27,17 @@ GRoute提供以下方法请求配置并获取KV配置：
             .setConfigUrl(configUrls)
             .build();
 ```
-#### 请求配置
+#### 使用配置
+```
+GRouteManager routeManager = GRouteManager.getInstance();
+if (routeManager.isAvaliable()) {
+    int code = routeManager.getCode();
+    String msg = routeManager.getMsg();
+    String baseUrl = routeManager.getBaseUrl();
+    boolean is_vip = routeManager.get("is_vip");
+}
+```
+#### 获取配置
 ```java
 GRouteManager.getInstance().update();
 ```

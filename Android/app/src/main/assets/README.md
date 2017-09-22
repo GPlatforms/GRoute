@@ -15,7 +15,7 @@ GRoute提供以下方法请求配置并获取KV配置：
 
 ```
 
-每个应用都需要配置BaseUrl(支持分模块)，为了方便开发者，我们额外提供了两个方法：
+为了方便开发者，特别提供了获取 Server Url 方法：
 
 ```
 
@@ -39,6 +39,20 @@ GRoute提供以下方法请求配置并获取KV配置：
             .setSecret(secretKey)
             .setConfigUrl(configUrls)
             .build();
+
+```
+
+#### 使用配置
+
+```
+
+    GRouteManager routeManager = GRouteManager.getInstance();
+    if (routeManager.isAvaliable()) {
+        int code = routeManager.getCode();
+        String msg = routeManager.getMsg();
+        String baseUrl = routeManager.getBaseUrl();
+        boolean is_vip = routeManager.get("is_vip");
+    }
 
 ```
 
