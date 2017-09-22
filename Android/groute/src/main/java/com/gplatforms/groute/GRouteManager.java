@@ -90,6 +90,8 @@ public class GRouteManager {
                 String sign = GRouteUtil.sha1(mSecret + mAppId + currentTime);
                 String result = configUrl + "?app_id=" + mAppId + "&timestamp=" + currentTime + "&sign=" + sign;
 
+                Log.d(TAG, "config url: " + result);
+
                 mConfigUrls.add(result);
             }
         }
@@ -184,6 +186,7 @@ public class GRouteManager {
                             }
                         }
                     } catch (Exception e) {
+                        mCallCount--;
                         if (!isSuccessed && mCallCount == 0) {
                             if (callback != null) {
                                 callback.onError(CODE_ERROR_PARSE, e.getMessage());

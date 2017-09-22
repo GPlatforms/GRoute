@@ -29,11 +29,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        String appId = "11";
-        String secretKey = "8e";
+        String appId = "111";
+        String secretKey = "aaa";
         List<String> configUrls = new ArrayList<>();
-        configUrls.add("http://111.111.111.111/groute/v1/config");
-        configUrls.add("http://222.222.222.2222/groute/v1/config");
+        configUrls.add("http://1.1.1.1/groute/v1/config");
+        configUrls.add("http://2.2.2.2/groute/v1/config");
         GRouteManager.getInstance()
                 .setContext(this)
                 .setAppId(appId)
