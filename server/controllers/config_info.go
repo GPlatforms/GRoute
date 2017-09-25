@@ -64,8 +64,9 @@ func (c *ConfigInfoController) GetConfigInfo(cxt *gin.Context) {
 	params["base_url"] = value
 
 	b, _ := json.Marshal(params)
+
 	aesEnc := common.AesEncrypt{}
 	aesData, _ := aesEnc.Encrypt(b, models.Config.DataSecret)
 
-	cxt.String(http.StatusOK, string(aesData))
+	cxt.String(http.StatusOK, aesData)
 }
