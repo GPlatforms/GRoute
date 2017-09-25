@@ -10,6 +10,7 @@
     <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="./css/font.css">
     <link rel="stylesheet" href="./css/xadmin.css">
+    <link rel="stylesheet" type="text/css" href="./lib/layui/css/layui.css" media="all">
     <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src="./lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="./js/xadmin.js"></script>
@@ -40,8 +41,8 @@
       </div>
       <xblock>
         <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
-        <button class="layui-btn" onclick="x_admin_show('添加用户','./dns-add.html')"><i class="layui-icon"></i>添加</button>
-        <span class="x-right" style="line-height:40px">共有数据：88 条</span>
+        <button class="layui-btn" onclick="x_admin_show('添加用户','/dns-add.html')"><i class="layui-icon"></i>添加</button>
+        <span class="x-right" style="line-height:40px">共有数据：{{.Count}} 条</span>
       </xblock>
       <table class="layui-table">
         <thead>
@@ -52,42 +53,65 @@
             <th>id</th>
             <th>app_id</th>
             <th>域名数组</th>
-            <th>更改时间</th>
+            <th>扩展字段</th>
             <th>操作</th>
             </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>
-              <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='2'><i class="layui-icon">&#xe605;</i></div>
-            </td>
-            <td>1</td>
-            <td>11235</td>
-            <td>["baidu.com"]</td>
-            <td>2017-08-17 18:22</td>
-            <td class="td-manage">
-              <a title="编辑"  onclick="x_admin_show('编辑','dns-edit.html',500,200)" href="javascript:;">
-                <i class="layui-icon">&#xe642;</i>
-              </a>
-              <a title="删除" onclick="member_del(this,'要删除的id')" href="javascript:;">
-                <i class="layui-icon">&#xe640;</i>
-              </a>
-            </td>
-          </tr>
+          {{range $i,$v := .ConfigInfo}}
+            <tr>
+              <td>
+                <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='2'><i class="layui-icon">&#xe605;</i></div>
+              </td>
+              
+              <td>{{$v.Id}}</td>
+              <td>{{$v.AppId}}</td>
+              <td>{{$v.DnsUrl}}</td>
+              <td>{{$v.Params}}</td>
+              
+              <td class="td-manage">
+                <a title="编辑"  onclick="x_admin_show('编辑','/dns-edit.html',500,200)" href="javascript:;">
+                  <i class="layui-icon">&#xe642;</i>
+                </a>
+                <a title="删除" onclick="member_del(this,'要删除的id')" href="javascript:;">
+                  <i class="layui-icon">&#xe640;</i>
+                </a>
+              </td>
+            </tr>
+          {{end}}
         </tbody>
       </table>
-      <div class="page">
+      <!-- <div class="page">
         <div>
           <a class="prev" href="">&lt;&lt;</a>
-          <a class="num" href="">1</a>
-          <span class="current">2</span>
-          <a class="num" href="">3</a>
+
+            {{if le .Page 1}}
+                <span class="current">{{.Page}}</span>
+                <a class="num" href="">2</a>
+            {{else}}
+                <a class="num" href="">1</a>
+                <span class="current">{{.Page}}</span>
+                <a class="num" href="">3</a>
+            {{end}}
           <a class="next" href="">&gt;&gt;</a>
         </div>
-      </div>
+      </div> -->
+
+      <div id="pageCss"></div>
 
     </div>
     <script>
+      layui.use(['laypage','layer'], function(){
+        var laypage = layui.laypage
+        ,layer = layui.layer;
+
+        laypage({
+          cont:'pageCss'
+          ,pages: 10
+          ,curr: location.hash.replace('#!fenye=','')
+          ,hash: 'fenye'
+        });
+      });
       layui.use('laydate', function(){
         var laydate = layui.laydate;
         

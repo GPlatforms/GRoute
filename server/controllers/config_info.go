@@ -20,6 +20,8 @@ func (c *ConfigInfoController) GetConfigInfo(cxt *gin.Context) {
 	appIdStr := cxt.Query("app_id")
 	sign := cxt.Query("sign")
 
+	models.ErrLogger.Info("client request url:", cxt.ClientIP(), cxt.Request.RequestURI)
+
 	sa := models.Config.AppSecret + appIdStr + timestamp
 	if common.SHA1Sign(sa) != sign {
 		models.CommonResult(cxt, models.SignErr)
@@ -61,5 +63,9 @@ func (c *ConfigInfoController) GetConfigInfo(cxt *gin.Context) {
 	params["msg"] = "success"
 	params["base_url"] = value
 
-	cxt.JSON(http.StatusOK, params)
+	b, _ := json.Marshal(params)
+	aesEnc := common.AesEncrypt{}
+	aesData, _ := aesEnc.Encrypt(b, models.Config.DataSecret)
+
+	cxt.String(http.StatusOK, string(aesData))
 }

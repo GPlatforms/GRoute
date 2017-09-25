@@ -1,7 +1,10 @@
 package models
 
 import (
+	"encoding/json"
 	"net/http"
+
+	"company/vpngo/server/common"
 
 	"github.com/gin-gonic/gin"
 )
@@ -22,5 +25,9 @@ var (
 )
 
 func CommonResult(c *gin.Context, result *ResultData) {
-	c.JSON(http.StatusOK, result)
+	b, _ := json.Marshal(result)
+	aesEnc := common.AesEncrypt{}
+	aesData, _ := aesEnc.Encrypt(b, Config.DataSecret)
+
+	c.String(http.StatusOK, string(aesData))
 }

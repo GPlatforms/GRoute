@@ -10,10 +10,11 @@ import (
 var RUNMODE string
 
 type Config struct {
-	Port      string
-	AppSecret string
-	Mode      string
-	Base      *DbBase
+	Port       string
+	AppSecret  string
+	DataSecret string
+	Mode       string
+	Base       *DbBase
 }
 
 type DBConfig struct {
@@ -27,11 +28,12 @@ type DbBase struct {
 }
 
 type baseConfig struct {
-	Port      int     `json:"port"`
-	AppSecret string  `json:"app_secret"`
-	Mode      string  `json:"mode"`
-	Dev       *DbBase `json:"dev"`
-	Prod      *DbBase `json:"prod"`
+	Port       int     `json:"port"`
+	AppSecret  string  `json:"app_secret"`
+	DataSecret string  `json:"data_secret"`
+	Mode       string  `json:"mode"`
+	Dev        *DbBase `json:"dev"`
+	Prod       *DbBase `json:"prod"`
 }
 
 func InitConfig(path string) *Config {
@@ -50,6 +52,7 @@ func InitConfig(path string) *Config {
 
 	config.Port = strconv.Itoa(baseConfig.Port)
 	config.AppSecret = baseConfig.AppSecret
+	config.DataSecret = baseConfig.DataSecret
 	config.Mode = baseConfig.Mode
 	if baseConfig.Mode == "dev" {
 		RUNMODE = "dev"

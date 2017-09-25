@@ -1,6 +1,7 @@
 {
     "port": 8867,
     "app_secret": "8elSYpCKwN",
+    "data_secret":"w2FG8DjogqMaM5Do",
     "mode": "dev",
     "dev": {
         "mysql": {
