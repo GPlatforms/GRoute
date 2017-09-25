@@ -2,33 +2,17 @@
 //  GRoute.swift
 //  GRoute
 //
-//  Created by weibo on 17/3/16.
-//  Copyright © 2017年 lez. All rights reserved.
+//  Created by admin on 17/3/16.
+//  Copyright © 2017年 admin. All rights reserved.
 //
 
 import Foundation
 import Alamofire
 
-public enum GRouteResult {
+enum GRouteResult {
     case Success()
     case Fail(Error?)
 }
-
-open class Rule {
-    var reg = ""
-    var url = ""
-    
-    init() {
-        
-    }
-    
-    init(newReg:String?,newURL:String?) {
-        reg = newReg ?? ""
-        url = newURL ?? ""
-    }
-}
-
-
 
 open class GRouteManager {
     public static let sharedInstance = GRouteManager()
@@ -41,11 +25,22 @@ open class GRouteManager {
     
     public var originDict:[String:Any] = [:]
     
-    public func getConfig(app_id:String, time:String, sign:String, urls:[String],sucessCallback:@escaping () -> Void) {
+    public var app_id = ""
+    
+    public var time = ""
+    
+    public var sign = ""
+    
+    public var urls:[String] = []
+    
+    public var isAvailable = false
+    
+    public func update(sucessCallback:@escaping () -> Void) {
         for item in urls {
             getRouteConfigFromServer(item, parameters: ["app_id":app_id,"timestamp":"\(time)","sign":sign], callback: { (res) in
                 switch res {
                 case .Success() :
+                    self.isAvailable = true
                     sucessCallback()
                     return
                 case .Fail(_):
@@ -55,7 +50,7 @@ open class GRouteManager {
         }
     }
     
-    public func getRouteConfigFromServer(_ url: String,
+    func getRouteConfigFromServer(_ url: String,
                                          method: HTTPMethod = .get,
                                          parameters: Parameters? = nil,
                                          encoding: ParameterEncoding = URLEncoding.default,
@@ -92,7 +87,7 @@ open class GRouteManager {
     
     
     
-    public func getBaseUrl(functionName : String = "*") -> String? {
+    public func get() -> String? {
         return urlConfig.first
     }
     

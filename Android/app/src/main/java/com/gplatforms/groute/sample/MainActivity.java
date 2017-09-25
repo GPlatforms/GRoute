@@ -9,10 +9,14 @@ import android.widget.TextView;
 import com.gplatforms.groute.GRouteManager;
 import com.gplatforms.groute.GRouteCallBack;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import us.feras.mdv.MarkdownView;
 
 public class MainActivity extends AppCompatActivity {
 
+    private TextView mCacheView;
     private Button mRequestButton;
     private TextView mResultView;
     private MarkdownView markdownView;
@@ -25,12 +29,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        String appId = "1111";
-        String secretKey =  "abcdefgh";
+        String appId = "111";
+        String secretKey = "aaa";
+        List<String> configUrls = new ArrayList<>();
+        configUrls.add("http://1.1.1.1/groute/v1/config");
+        configUrls.add("http://2.2.2.2/groute/v1/config");
         GRouteManager.getInstance()
-                .addConfigUrl("http://111.111.111.111/groute/v1/config", appId, secretKey)
-                .addConfigUrl("http://222.222.222.222/groute/v1/config", appId, secretKey);
+                .setContext(this)
+                .setAppId(appId)
+                .setSecret(secretKey)
+                .setConfigUrl(configUrls)
+                .build();
 
+        mCacheView = (TextView) findViewById(R.id.cache);
         mRequestButton = (Button) findViewById(R.id.request);
         mResultView = (TextView) findViewById(R.id.result);
         markdownView = (MarkdownView) findViewById(R.id.markdown);
@@ -41,13 +52,29 @@ public class MainActivity extends AppCompatActivity {
                 request();
             }
         });
+        showCache();
         setMarkdownText();
+    }
+
+    private void showCache() {
+        GRouteManager routeManager = GRouteManager.getInstance();
+        StringBuilder mCache = new StringBuilder();
+        mCache.append("isAvaliable：" + routeManager.isAvaliable() + "\n");
+        if (routeManager.isAvaliable()) {
+            mCache.append("- - - - - - - - - - - - - - - -\n");
+            mCache.append("code：" + routeManager.getCode() + "\n");
+            mCache.append("msg：" + routeManager.getMsg() + "\n");
+            mCache.append("base_url：" + routeManager.getBaseUrl() + "\n");
+            boolean is_vip = routeManager.get("is_vip");
+            mCache.append("is_vip: " + is_vip + "\n");
+        }
+        mCacheView.setText(mCache);
     }
 
     public void request() {
         mResultView.setText("正在请求中....");
         mResult = new StringBuilder();
-        GRouteManager.getInstance().request(new GRouteCallBack() {
+        GRouteManager.getInstance().update(new GRouteCallBack() {
             @Override
             public void onError(int code, String message) {
                 mResult.append("发生错误：\n\n");
@@ -82,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         mResultView.setText(mResult.toString());
+                        showCache();
                     }
                 });
             }
