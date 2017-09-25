@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		84B869961F7367E200C38B48 /* test1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B869951F7367E200C38B48 /* test1.swift */; };
 		D67271D91E8118C6006F93BA /* GRoute.podspec in Resources */ = {isa = PBXBuildFile; fileRef = D67271D81E8118C6006F93BA /* GRoute.podspec */; };
 		D67271DB1E811DBC006F93BA /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = D67271DA1E811DBC006F93BA /* LICENSE */; };
 		D6AA631B1E7A5BE200D00028 /* GRoute.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6AA63111E7A5BE200D00028 /* GRoute.framework */; };
@@ -88,7 +87,6 @@
 
 /* Begin PBXFileReference section */
 		848B65A81F7395B30044519A /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
-		84B869951F7367E200C38B48 /* test1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = test1.swift; path = ../test1.swift; sourceTree = "<group>"; };
 		84B869BF1F73687800C38B48 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = "../../Library/Developer/Xcode/DerivedData/GRoute-avrsambmrglsnxcisveezpheciqk/Build/Products/Debug-iphonesimulator/Alamofire/Alamofire.framework"; sourceTree = "<group>"; };
 		84B869C21F73691900C38B48 /* Pods_GRoute.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_GRoute.framework; path = "../../Library/Developer/Xcode/DerivedData/GRoute-avrsambmrglsnxcisveezpheciqk/Build/Products/Debug-iphonesimulator/Pods_GRoute.framework"; sourceTree = "<group>"; };
 		9CAB8DCFE8B3C1A1E04EC497 /* Pods-GRoute.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GRoute.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GRoute/Pods-GRoute.debug.xcconfig"; sourceTree = "<group>"; };
@@ -192,7 +190,6 @@
 		D6AA631E1E7A5BE200D00028 /* GRouteTests */ = {
 			isa = PBXGroup;
 			children = (
-				84B869951F7367E200C38B48 /* test1.swift */,
 				D6AA63211E7A5BE200D00028 /* Info.plist */,
 			);
 			path = GRouteTests;
@@ -413,7 +410,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				84B869961F7367E200C38B48 /* test1.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
